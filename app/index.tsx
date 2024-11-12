@@ -1,18 +1,21 @@
-import MenuItem from "@/components/kiosk/MenuItem";
-import { Other, Product } from "@/constants/Product";
-import { StyleSheet, Image, Text, View, ScrollView } from "react-native";
+import MenuItem from '@/components/kiosk/MenuItem';
+import ProductModal from '@/components/kiosk/ProductModal';
+import { Other, Product } from '@/constants/Product';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useState } from 'react';
+import { StyleSheet, Image, Text, View, ScrollView, TouchableOpacity, Pressable } from 'react-native';
+import Modal from 'react-native-modal';
 
 export default function Index() {
+  const [is_product_modal_open, setIsProductModalOpen] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.menu}>
-        <ScrollView contentContainerStyle={{ flex: 0 }}>
+        <ScrollView>
           <View style={{ gap: 40 }}>
             <View style={styles.top_menu}>
-              <Image
-                source={require("../assets/images/logo.png")}
-                style={styles.logo_image}
-              />
+              <Image source={require('../assets/images/logo.png')} style={styles.logo_image} />
               <View style={styles.title}>
                 <Text style={styles.title_main_text}>상품을</Text>
                 <Text style={styles.title_sub_text}>선택해 주세요.</Text>
@@ -20,7 +23,9 @@ export default function Index() {
             </View>
             <View style={styles.menu_wrapper}>
               {Product.map((product, idx) => (
-                <MenuItem key={idx} {...product} />
+                <TouchableOpacity key={`main_${idx}`} onPress={() => setIsProductModalOpen(true)}>
+                  <MenuItem {...product} />
+                </TouchableOpacity>
               ))}
             </View>
             <Text style={styles.title_main_text}>다른 상품들</Text>
@@ -33,6 +38,7 @@ export default function Index() {
         </ScrollView>
       </View>
       <View style={styles.my_cart}></View>
+      <ProductModal opened={is_product_modal_open} onClose={() => setIsProductModalOpen(false)} />
     </View>
   );
 }
@@ -40,8 +46,8 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    backgroundColor: '#fff',
   },
   logo_image: {
     width: 93,
@@ -52,44 +58,38 @@ const styles = StyleSheet.create({
     flex: 0.7,
     width: 580,
     padding: 45,
-    flexDirection: "column",
+    flexDirection: 'column',
     gap: 40,
-    overflow: "scroll",
+    overflow: 'scroll',
   },
   top_menu: {
-    flexDirection: "column",
+    flexDirection: 'column',
     gap: 92,
   },
   title: {
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   title_main_text: {
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
     fontSize: 64,
-    fontWeight: "bold",
-    color: "#3D3D3D",
+    fontWeight: 'bold',
+    color: '#3D3D3D',
   },
   title_sub_text: {
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
     fontSize: 64,
-    fontWeight: "medium",
-    color: "#3D3D3D",
+    fontWeight: 'medium',
+    color: '#3D3D3D',
   },
   my_cart: {
-    backgroundColor: "#FBFBF9",
+    backgroundColor: '#FBFBF9',
     width: 292,
     flex: 0.3,
   },
   menu_wrapper: {
     gap: 20,
-    flexWrap: "wrap",
-    flexDirection: "row",
-    alignContent: "flex-start",
-  },
-  menu_item: {
-    width: 143,
-    height: 155,
-    backgroundColor: "#C22C24",
-    borderRadius: 30,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    alignContent: 'flex-start',
   },
 });
