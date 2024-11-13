@@ -3,7 +3,22 @@ export enum ProductType {
   EXTRA = 'EXTRA',
 }
 
-export const Product = [
+export interface ItemType {
+  type: ProductType;
+  title: string;
+  menu_price: string;
+  image: any;
+  price: number;
+  options: string[];
+}
+
+export interface CartItemType {
+  item: ItemType;
+  price: number;
+  selected_options: string;
+}
+
+export const Product: ItemType[] = [
   {
     type: ProductType.EXTRA,
     title: '배추김치',
@@ -50,7 +65,7 @@ export const Product = [
     menu_price: '5000원',
     price: 5000,
     image: require('../assets/images/6.png'),
-    options: [],
+    options: ['quantity'],
   },
 ];
 

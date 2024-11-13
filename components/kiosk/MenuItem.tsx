@@ -44,8 +44,8 @@ export default MenuItem;
 
 const styles = StyleSheet.create({
   menu_item: {
-    width: 143,
-    height: 155,
+    width: 135,
+    height: 150,
     backgroundColor: '#C22C24',
     borderRadius: 30,
     alignItems: 'center',
