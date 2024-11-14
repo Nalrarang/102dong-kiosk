@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, TextInput, Button, Pressable } from 'rea
 import { CartItemType, ItemType } from '@/constants/Product';
 import { useMemo, useState } from 'react';
 import { Entypo } from '@expo/vector-icons';
+import BaseText from './BaseText';
 
 interface Props {
   opened: boolean;
@@ -60,7 +61,9 @@ const ProductModal = ({ opened, onClose, selected_item, setCartItems }: Props) =
     <Modal isVisible={opened}>
       <View style={styles.modalContent}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>옵션 선택</Text>
+          <BaseText weight='bold' style={styles.title}>
+            옵션 선택
+          </BaseText>
         </View>
         {/* 상세 컨텐츠 영역 */}
         <View style={styles.modalBody}>
@@ -70,15 +73,21 @@ const ProductModal = ({ opened, onClose, selected_item, setCartItems }: Props) =
                 <Image source={selected_item.image} style={{ width: '100%', height: '100%', resizeMode: 'cover' }} />
               </View>
               <View>
-                <Text style={styles.thumbnailText}>{selected_item.title}</Text>
-                <Text style={styles.thumbnailText}>{selected_item.menu_price}</Text>
+                <BaseText weight='bold' style={styles.thumbnailText}>
+                  {selected_item.title}
+                </BaseText>
+                <BaseText weight='semibold' style={styles.thumbnailText}>
+                  {selected_item.menu_price}
+                </BaseText>
               </View>
             </View>
             <View style={styles.formWrapper}>
               <View style={{ marginTop: 35 }}>
                 {selected_item.options.includes('weight') && (
                   <>
-                    <Text style={styles.formLabel}>무게 입력(단위: kg)</Text>
+                    <BaseText weight='semibold' style={styles.formLabel}>
+                      무게 입력(단위: kg)
+                    </BaseText>
                     <TextInput
                       inputMode={'numeric'}
                       style={styles.formInput}
@@ -91,21 +100,23 @@ const ProductModal = ({ opened, onClose, selected_item, setCartItems }: Props) =
                 )}
                 {selected_item.options.includes('quantity') && (
                   <>
-                    <Text style={styles.formLabel}>수량 입력</Text>
+                    <BaseText weight='semibold' style={styles.formLabel}>
+                      수량 입력
+                    </BaseText>
                     <View style={styles.quantityWrapper}>
                       <Pressable
                         disabled={quantity <= 1}
                         style={{ ...styles.quantityButton, backgroundColor: quantity <= 1 ? '#D8D8D8' : '#C22C24' }}
                         onPress={() => setQuantity(quantity - 1)}
                       >
-                        <Entypo name='minus' size={42} color='#ffffff' />
+                        <Entypo name='minus' size={38} color='#ffffff' />
                       </Pressable>
                       <Text style={styles.quantity}>{quantity}</Text>
                       <Pressable
                         style={{ ...styles.quantityButton, backgroundColor: '#C22C24' }}
                         onPress={() => setQuantity(quantity + 1)}
                       >
-                        <Entypo name='plus' size={42} color='#ffffff' />
+                        <Entypo name='plus' size={38} color='#ffffff' />
                       </Pressable>
                     </View>
                   </>
@@ -113,7 +124,9 @@ const ProductModal = ({ opened, onClose, selected_item, setCartItems }: Props) =
               </View>
               {selected_item.options.includes('container_exclude') && (
                 <View>
-                  <Text style={styles.formLabel}>김치통 무게 입력(단위: kg)</Text>
+                  <BaseText weight='semibold' style={styles.formLabel}>
+                    김치통 무게 입력(단위: kg)
+                  </BaseText>
                   <TextInput
                     inputMode={'numeric'}
                     style={styles.formInput}
@@ -125,7 +138,9 @@ const ProductModal = ({ opened, onClose, selected_item, setCartItems }: Props) =
                 </View>
               )}
               <View>
-                <Text style={styles.price}>총 가격: {price.toLocaleString()}원</Text>
+                <BaseText weight='bold' style={styles.price}>
+                  총 가격: {price.toLocaleString()}원
+                </BaseText>
               </View>
             </View>
           </View>
@@ -133,14 +148,18 @@ const ProductModal = ({ opened, onClose, selected_item, setCartItems }: Props) =
         {/* 버튼 영역 */}
         <View style={styles.buttonWrapper}>
           <Pressable style={{ ...styles.button, backgroundColor: '#F1F1F8' }} onPress={onModalClose}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#363644' }}>취소</Text>
+            <BaseText weight='semibold' style={{ fontSize: 24, color: '#363644' }}>
+              취소
+            </BaseText>
           </Pressable>
           <Pressable
             disabled={price === 0}
             style={{ ...styles.button, backgroundColor: '#C22C24', opacity: price === 0 ? 0.7 : 1 }}
             onPress={addItem}
           >
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#ffffff' }}>담기</Text>
+            <BaseText weight='semibold' style={{ fontSize: 24, color: '#ffffff' }}>
+              담기
+            </BaseText>
           </Pressable>
         </View>
       </View>
@@ -170,7 +189,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
     color: '#FFFFFF',
   },
   modalBody: {
@@ -200,17 +218,16 @@ const styles = StyleSheet.create({
   },
   thumbnailText: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: '#3D3D3D',
     textAlign: 'center',
   },
   formWrapper: {
     width: 330,
     gap: 30,
+    justifyContent: 'space-between',
   },
   formLabel: {
     fontSize: 24,
-    fontWeight: 'medium',
     color: '#3D3D3D',
   },
   formInput: {
@@ -222,12 +239,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     fontSize: 24,
-    fontWeight: 'medium',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#3D3D3D',
   },
   price: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: '#3D3D3D',
     textAlign: 'right',
   },
@@ -255,7 +271,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   quantityWrapper: {
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
@@ -264,12 +280,12 @@ const styles = StyleSheet.create({
     width: 100,
     fontSize: 42,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-Bold',
     color: '#3D3D3D',
   },
   quantityButton: {
-    width: 70,
-    height: 70,
+    width: 45,
+    height: 45,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#D8D8D8',

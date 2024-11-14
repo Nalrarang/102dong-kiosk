@@ -1,6 +1,7 @@
 import { ItemType } from '@/constants/Product';
 import { AntDesign } from '@expo/vector-icons';
-import { View, Image, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Image, StyleSheet, Pressable } from 'react-native';
+import BaseText from './BaseText';
 
 interface CartItemProps {
   item: ItemType;
@@ -21,10 +22,16 @@ const CartItem = ({ item, options, price, removeItem }: CartItemProps) => {
         <AntDesign name='close' size={24} color='#878787' />
       </Pressable>
       <Image source={item.image} style={styles.cart_thumbnail} />
-      <View>
-        <Text style={styles.cart_item_title}>{item.title}</Text>
-        <Text style={styles.cart_item_options}>{option_value}</Text>
-        <Text style={styles.cart_item_price}>{price.toLocaleString()}원</Text>
+      <View style={{ gap: 5 }}>
+        <BaseText weight='semibold' style={styles.cart_item_title}>
+          {item.title}
+        </BaseText>
+        <BaseText weight='semibold' style={styles.cart_item_options}>
+          {option_value}
+        </BaseText>
+        <BaseText weight='bold' style={styles.cart_item_price}>
+          {price.toLocaleString()}원
+        </BaseText>
       </View>
       <View style={styles.divider}></View>
     </View>
@@ -50,19 +57,16 @@ const styles = StyleSheet.create({
   },
   cart_item_title: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: '#3D3D3D',
     textAlign: 'center',
   },
   cart_item_options: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: '#787887',
     textAlign: 'center',
   },
   cart_item_price: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: '#3D3D3D',
     textAlign: 'center',
   },

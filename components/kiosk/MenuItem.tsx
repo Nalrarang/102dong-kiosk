@@ -1,5 +1,6 @@
 import { ProductType } from '@/constants/Product';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import BaseText from './BaseText';
 interface MenuItemProps {
   type: ProductType;
   title: string;
@@ -19,22 +20,24 @@ const MenuItem = ({ type, title, menu_price, price, image, options }: MenuItemPr
     >
       <Image source={image} style={styles.thumbnail} />
       <View style={{ alignItems: 'center' }}>
-        <Text
+        <BaseText
+          weight='bold'
           style={{
-            ...styles.item_text,
+            fontSize: 16,
             color: type === ProductType.BASIC ? '#3D3D3D' : '#FFFFFF',
           }}
         >
           {title}
-        </Text>
-        <Text
+        </BaseText>
+        <BaseText
+          weight='semibold'
           style={{
-            ...styles.item_text,
+            fontSize: 16,
             color: type === ProductType.BASIC ? '#3D3D3D' : '#FFFFFF',
           }}
         >
           {menu_price}
-        </Text>
+        </BaseText>
       </View>
     </View>
   );
@@ -58,11 +61,5 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 1,
     borderColor: '#00000012',
-  },
-  item_text: {
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: 'bold',
-    includeFontPadding: false,
   },
 });

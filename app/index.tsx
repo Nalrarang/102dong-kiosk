@@ -1,11 +1,12 @@
+import BaseText from '@/components/kiosk/BaseText';
 import CartItem from '@/components/kiosk/CartItem';
 import MenuItem from '@/components/kiosk/MenuItem';
 import ProductModal from '@/components/kiosk/ProductModal';
 import ReceiptModal from '@/components/kiosk/ReceiptModal';
 import { CartItemType, ItemType, Other, Product } from '@/constants/Product';
-import { Entypo, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
-import { StyleSheet, Image, Text, View, ScrollView, TouchableOpacity, Pressable, Alert } from 'react-native';
+import { StyleSheet, Image, Platform, View, ScrollView, TouchableOpacity, Pressable, Alert } from 'react-native';
 
 export default function Index() {
   const [is_product_modal_open, setIsProductModalOpen] = useState(false);
@@ -26,16 +27,24 @@ export default function Index() {
     setCartItems(cart_items.filter((_, index) => idx !== index));
   };
 
+  const allClearCartItem = () => {
+    setCartItems([]);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.menu}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
           <View style={{ gap: 40 }}>
             <View style={styles.top_menu}>
               <Image source={require('../assets/images/logo.png')} style={styles.logo_image} />
               <View style={styles.title}>
-                <Text style={styles.title_main_text}>상품을</Text>
-                <Text style={styles.title_sub_text}>선택해 주세요.</Text>
+                <BaseText weight='bold' style={styles.title_main_text}>
+                  상품을
+                </BaseText>
+                <BaseText weight='regular' style={styles.title_main_text}>
+                  선택해 주세요.
+                </BaseText>
               </View>
             </View>
             <View style={styles.menu_wrapper}>
@@ -51,7 +60,9 @@ export default function Index() {
                 </TouchableOpacity>
               ))}
             </View>
-            <Text style={styles.title_main_text}>다른 상품들</Text>
+            <BaseText weight='bold' style={styles.title_main_text}>
+              다른 상품들
+            </BaseText>
             <View style={styles.menu_wrapper}>
               {Other.map((other, idx) => (
                 <TouchableOpacity
@@ -70,13 +81,17 @@ export default function Index() {
       </View>
       <View style={styles.my_cart}>
         <View style={{ flex: 1, flexDirection: 'column', gap: 20 }}>
-          <Text style={styles.cart_title}>내 주문</Text>
+          <BaseText weight='bold' style={styles.cart_title}>
+            내 주문
+          </BaseText>
           <View style={styles.divider} />
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
             {cart_items.length === 0 && (
               <View style={{ minHeight: 500, justifyContent: 'center', alignItems: 'center', gap: 15 }}>
-                <FontAwesome5 name='shopping-cart' size={42} color='#898987' />
-                <Text style={{ fontSize: 28, color: '#898987', textAlign: 'center' }}>메뉴에서 상품을 담아주세요.</Text>
+                <FontAwesome5 name='shopping-cart' size={38} color='#898987' />
+                <BaseText weight='light' style={{ fontSize: 28, color: '#898987', textAlign: 'center' }}>
+                  메뉴에서 상품을 담아주세요.
+                </BaseText>
               </View>
             )}
             {cart_items.map((item, idx) => (
@@ -91,28 +106,39 @@ export default function Index() {
           </ScrollView>
           <View style={styles.divider} />
           <View style={{ height: 250, gap: 20, padding: 10, marginTop: 40, alignItems: 'center' }}>
-            <Text style={styles.total_text}>총 금액</Text>
-            <Text style={styles.total_price}>{total_price.toLocaleString()}원</Text>
+            <BaseText weight='bold' style={styles.total_text}>
+              총 금액
+            </BaseText>
+            <BaseText weight='regular' style={styles.total_price}>
+              {total_price.toLocaleString()}원
+            </BaseText>
             <Pressable
               disabled={total_price <= 0}
               style={{ ...styles.payButton, backgroundColor: '#FFCA40', opacity: total_price <= 0 ? 0.4 : 1 }}
               onPress={() => {
-                Alert.alert('결제하시겠습니까?', '', [
-                  {
-                    text: '취소',
-                    style: 'cancel',
-                  },
-                  {
-                    text: '확인',
-                    onPress: () => {
-                      setIsReceiptModalOpen(true);
+                if (Platform.OS === 'web') {
+                  if (confirm('결제하시겠습니까?')) {
+                    setIsReceiptModalOpen(true);
+                  }
+                } else {
+                  Alert.alert('결제하시겠습니까?', '', [
+                    {
+                      text: '취소',
+                      style: 'cancel',
                     },
-                  },
-                ]);
-                setIsReceiptModalOpen(true);
+                    {
+                      text: '확인',
+                      onPress: () => {
+                        setIsReceiptModalOpen(true);
+                      },
+                    },
+                  ]);
+                }
               }}
             >
-              <Text style={styles.pay}>결제하기</Text>
+              <BaseText weight='semibold' style={styles.pay}>
+                결제하기
+              </BaseText>
             </Pressable>
           </View>
         </View>
@@ -123,7 +149,15 @@ export default function Index() {
         selected_item={selectedProduct}
         setCartItems={addCartItem}
       />
-      <ReceiptModal opened={is_receipt_modal_open} onClose={() => setIsReceiptModalOpen(false)} />
+      <ReceiptModal
+        opened={is_receipt_modal_open}
+        onClose={() => {
+          allClearCartItem();
+          setIsReceiptModalOpen(false);
+        }}
+        cart_items={cart_items}
+        total_price={total_price}
+      />
     </View>
   );
 }
@@ -155,15 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   title_main_text: {
-    fontFamily: 'Inter',
     fontSize: 64,
-    fontWeight: 'bold',
-    color: '#3D3D3D',
-  },
-  title_sub_text: {
-    fontFamily: 'Inter',
-    fontSize: 64,
-    fontWeight: 'medium',
     color: '#3D3D3D',
   },
   my_cart: {
@@ -176,19 +202,16 @@ const styles = StyleSheet.create({
   cart_title: {
     marginTop: 150,
     fontSize: 36,
-    fontWeight: 'bold',
     color: '#3D3D3D',
     textAlign: 'center',
   },
   total_text: {
     fontSize: 24,
     color: '#898987',
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   total_price: {
     fontSize: 36,
-    fontWeight: 'bold',
     color: '#3D3D3D',
     textAlign: 'center',
   },
@@ -200,7 +223,6 @@ const styles = StyleSheet.create({
   },
   pay: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: '#3D3D3D',
     textAlign: 'center',
   },

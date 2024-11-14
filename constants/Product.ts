@@ -76,7 +76,7 @@ export const Other = [
     menu_price: '1kg 18000원',
     price: 18000,
     image: require('../assets/images/7.png'),
-    options: [],
+    options: ['quantity'],
   },
   {
     type: ProductType.BASIC,
@@ -84,7 +84,7 @@ export const Other = [
     menu_price: '1kg 25000원',
     price: 25000,
     image: require('../assets/images/8.png'),
-    options: [],
+    options: ['quantity'],
   },
   {
     type: ProductType.BASIC,
@@ -92,6 +92,6 @@ export const Other = [
     menu_price: '1kg 18000원',
     price: 18000,
     image: require('../assets/images/9.png'),
-    options: [],
+    options: ['quantity'],
   },
 ];
